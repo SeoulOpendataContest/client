@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'pages/home.dart';
+import 'pages/store.dart';
+import 'pages/kindstore.dart';
+import 'pages/chat.dart';
+
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
@@ -9,25 +14,12 @@ class MainApp extends StatefulWidget {
 
 class _MainApp extends State<MainApp> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+
+  final List<Widget> _widgetOptions = <Widget>[
+    HomePage(),
+    StorePage(),
+    KindStorePage(),
+    ChatPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -39,9 +31,6 @@ class _MainApp extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Sample App'),
-        ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
@@ -70,10 +59,8 @@ class _MainApp extends State<MainApp> {
             //selectedItemColor: Colors.amber[800],
             onTap: _onItemTapped,
             type: BottomNavigationBarType.fixed,
-            //text size
             selectedFontSize: 10,
             unselectedFontSize: 10,
-            //hieght
           ),
         ));
   }

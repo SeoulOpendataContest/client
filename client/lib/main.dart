@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 
 void main() {
-  runApp(const Main());
+  runApp(Main());
 }
 
 class Main extends StatelessWidget {
-  const Main({super.key});
-
+  Main({super.key});
+  bool isToken = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
