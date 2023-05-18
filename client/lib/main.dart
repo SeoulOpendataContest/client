@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 
+import 'app.dart';
+
 void main() {
-  runApp(const MainApp());
+  runApp(const Main());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class Main extends StatelessWidget {
+  const Main({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp(
+      title: 'Sample App',
+      theme: ThemeData(
+        primarySwatch: Colors.lightGreen,
+        // fontFamily: 'NotoSansKR',
+        // textTheme: const TextTheme(
+
+        // )
       ),
+      home: const MainApp(),
     );
   }
 }
