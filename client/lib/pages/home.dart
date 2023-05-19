@@ -7,13 +7,12 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  bool isCard = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Center(
-          child: Text('Home'),
-        ),
+    return Container(
+      child: Center(
+        child: Text('Home'),
       ),
     );
   }

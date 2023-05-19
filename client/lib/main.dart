@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'signin.dart';
 import 'app.dart';
 
 void main() {
-  runApp(Main());
+  runApp(const Main());
 }
 
 class Main extends StatelessWidget {
-  Main({super.key});
-  bool isToken = false;
+  const Main({super.key});
   @override
   Widget build(BuildContext context) {
+    bool istoken = false;
     return MaterialApp(
       title: 'Sample App',
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
         // fontFamily: 'NotoSansKR',
-        // textTheme: const TextTheme(
-
-        // )
+        // textTheme: const TextTheme()
       ),
-      home: const MainApp(),
+      home: istoken ? const MainApp() : const Signin(),
     );
   }
 }
