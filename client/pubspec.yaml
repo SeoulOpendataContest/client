@@ -1,19 +1,33 @@
 name: client
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.0.0-228.0.dev <4.0.0'
+    sdk: ">=3.0.0-228.0.dev <4.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
+    flutter:
+        sdk: flutter
+    shared_preferences: ^2.1.1
+    flutter_native_splash: ^2.2.18
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^2.0.0
+    flutter_test:
+        sdk: flutter
+    flutter_lints: ^2.0.0
 
 flutter:
-  uses-material-design: true
+    uses-material-design: true
+    assets:
+        - asset/fonts/
+        - asset/bank/
+        - asset/categorylist/
+        - asset/character/
+        - asset/kindstore/
+        - asset/store/
+    fonts:
+        - family: NanumSquare
+          fonts:
+              - asset: asset/fonts/NanumSquareR.ttf
+              - asset: asset/fonts/NanumSquareB.ttf
