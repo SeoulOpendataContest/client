@@ -12,6 +12,10 @@ dependencies:
     shared_preferences: ^2.1.1
     flutter_native_splash: ^2.2.18
     flutter_launcher_icons: ^0.13.1
+    dio: ^5.1.2
+    retrofit: ^4.0.1
+    json_annotation: ^4.8.0
+    kakao_map_plugin: ^0.1.4
     # credit_card_scanner: ^1.0.0
 
 flutter_launcher_icons:
@@ -34,6 +38,9 @@ dev_dependencies:
     flutter_test:
         sdk: flutter
     flutter_lints: ^2.0.0
+    build_runner: ^2.3.3
+    json_serializable: ^6.6.1
+    retrofit_generator: ^6.0.0+1
 
 flutter:
     uses-material-design: true
@@ -45,6 +52,7 @@ flutter:
         - asset/kindstore/
         - asset/store/
         - asset/logo/
+        - asset/chating/
     fonts:
         - family: NanumSquare
           fonts:
