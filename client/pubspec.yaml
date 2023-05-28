@@ -11,6 +11,23 @@ dependencies:
         sdk: flutter
     shared_preferences: ^2.1.1
     flutter_native_splash: ^2.2.18
+    flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
+    image_path: "asset/logo/logo.png"
+    min_sdk_android: 21 # android min sdk min:16, default 21
+    web:
+        generate: true
+        image_path: "asset/logo/logo.png"
+
+    windows:
+        generate: true
+        icon_size: 48 # min:48, max:256, default: 48
+    macos:
+        generate: true
+        image_path: "asset/logo/logo.png"
 
 dev_dependencies:
     flutter_test:
@@ -26,6 +43,7 @@ flutter:
         - asset/character/
         - asset/kindstore/
         - asset/store/
+        - asset/logo/
     fonts:
         - family: NanumSquare
           fonts:

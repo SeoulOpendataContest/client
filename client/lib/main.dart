@@ -18,15 +18,11 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     bool istoken = false;
     return MaterialApp(
-      title: 'Sample App',
+      title: '어깨동무',
       theme: ThemeData(
-        //#FFC842
-        primarySwatch: const MaterialColor(500, {
-          300: Color(0xFFFDF8EA),
-          500: Color(0xFFFFC842),
-        }),
-        fontFamily: 'NanumSquare',
-      ),
+          canvasColor: Colors.white,
+          primarySwatch: Colors.amber,
+          fontFamily: 'NanumSquare'),
       home: istoken ? const MainApp() : const Signin(),
     );
   }

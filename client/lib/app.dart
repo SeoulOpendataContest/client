@@ -4,6 +4,7 @@ import 'pages/home.dart';
 import 'pages/store.dart';
 import 'pages/kindstore.dart';
 import 'pages/chat.dart';
+import 'mypage.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -32,12 +33,23 @@ class _MainApp extends State<MainApp> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: const SizedBox(
+            width: 10,
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.person),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyPage()),
+                );
+              },
+            ),
+            const SizedBox(width: 10),
+          ],
         ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
