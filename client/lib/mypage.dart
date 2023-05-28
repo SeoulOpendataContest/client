@@ -33,7 +33,7 @@ class MyPageState extends State<MyPage> {
         ),
         body: Column(
           children: [
-            Container(
+            const SizedBox(
               height: 100,
               child: Column(children: [Text("안녕하세요"), Text("서울시 님")]),
             ),

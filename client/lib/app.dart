@@ -4,7 +4,6 @@ import 'pages/home.dart';
 import 'pages/store.dart';
 import 'pages/kindstore.dart';
 import 'pages/chat.dart';
-import 'mypage.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -17,10 +16,10 @@ class _MainApp extends State<MainApp> {
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    StorePage(),
-    KindStorePage(),
-    ChatPage(),
+    const HomePage(),
+    const StorePage(),
+    const KindStorePage(),
+    const ChatPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -32,25 +31,6 @@ class _MainApp extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: const SizedBox(
-            width: 10,
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.person),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyPage()),
-                );
-              },
-            ),
-            const SizedBox(width: 10),
-          ],
-        ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),

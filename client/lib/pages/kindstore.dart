@@ -9,8 +9,8 @@ class KindStorePage extends StatefulWidget {
 class KindStorePageState extends State<KindStorePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return const Scaffold(
+      body: SizedBox(
         child: Center(
           child: Text('kind store'),
         ),

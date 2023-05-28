@@ -251,7 +251,6 @@ class SignUp2State extends State<SignUp2> {
         appBar: AppBar(
           backgroundColor: const Color(0xFFFDF8EA),
           elevation: 0,
-          shape: const Border(bottom: BorderSide(color: Colors.black12)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
