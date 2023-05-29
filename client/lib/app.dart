@@ -56,9 +56,13 @@ class _MainApp extends State<MainApp> {
               ),
             ],
             currentIndex: _selectedIndex,
-            //selectedItemColor: Colors.amber[800],
             onTap: _onItemTapped,
             type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.black,
+            selectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.w900, color: Colors.black),
+            selectedIconTheme:
+                const IconThemeData(color: Colors.black, size: 30),
             selectedFontSize: 10,
             unselectedFontSize: 10,
           ),

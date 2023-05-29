@@ -16,6 +16,9 @@ abstract class ClientMap {
 
   @GET('/location/goodvibestorefind')
   Future<String> getMapGoodVibeStoreFind({@Body() required jsondata});
+
+  @GET('/location/mylocation')
+  Future<String> getMapMyLocation({@Body() required jsondata});
 }
 
 @RestApi(baseUrl: 'http://43.200.242.244:8080')
@@ -33,4 +36,16 @@ abstract class ClientPerson {
 
   @POST('/check/nickname')
   Future<String> checkNickname({@Body() required jsondata});
+}
+
+@JsonSerializable()
+class Location {
+  Location({
+    required this.address_name,
+  });
+  String address_name;
+
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
+  Map<String, dynamic> toJson() => _$LocationToJson(this);
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
 import 'app.dart';
 import 'signup.dart';
+import 'api/client.dart';
+import 'api/log_interceptor.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -12,6 +15,12 @@ class Signin extends StatefulWidget {
 
 class SigninState extends State<Signin> {
   final formKey = GlobalKey<FormState>();
+  final prefs = SharedPreferences.getInstance();
+
+  void setString(String accessToken) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('accessToken', accessToken);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +95,22 @@ class SigninState extends State<Signin> {
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 formKey.currentState!.save();
-                                print('id: $id, password: $password');
+
+                                final dio = Dio()
+                                  ..interceptors.add(CustomLogInterceptor());
+                                final restClient = ClientPerson(dio);
+                                var jsondata = {
+                                  "email": id,
+                                  "password": password,
+                                };
+                                restClient
+                                    .login(jsondata: jsondata)
+                                    .then((value) {
+                                  print(value);
+                                });
+
+                                setString(id);
+
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

@@ -3,6 +3,18 @@
 part of 'client.dart';
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Location _$LocationFromJson(Map<String, dynamic> json) => Location(
+      address_name: json['address_name'] as String,
+    );
+
+Map<String, dynamic> _$LocationToJson(Location instance) => <String, dynamic>{
+      'address_name': instance.address_name,
+    };
+
+// **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
@@ -86,6 +98,28 @@ class _ClientMap implements ClientMap {
     return value;
   }
 
+  @override
+  Future<String> getMapMyLocation({required dynamic jsondata}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = jsondata;
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/location/mylocation',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
@@ -99,6 +133,8 @@ class _ClientMap implements ClientMap {
     return requestOptions;
   }
 }
+
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _ClientPerson implements ClientPerson {
   _ClientPerson(

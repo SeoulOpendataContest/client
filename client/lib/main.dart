@@ -14,9 +14,19 @@ void main() {
 
 class Main extends StatelessWidget {
   const Main({super.key});
+
   @override
   Widget build(BuildContext context) {
     bool istoken = false;
+
+    final prefs = SharedPreferences.getInstance();
+    prefs.then((value) {
+      if (value.getString('accessToken') != null) {
+        istoken = true;
+        print(value.getString('accessToken'));
+      }
+    });
+
     return MaterialApp(
       title: '어깨동무',
       theme: ThemeData(

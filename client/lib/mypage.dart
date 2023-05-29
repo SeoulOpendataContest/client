@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 import "signin.dart";
 
@@ -10,6 +11,12 @@ class MyPage extends StatefulWidget {
 
 class MyPageState extends State<MyPage> {
   bool isCard = false;
+
+  void removeString() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('accessToken');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,9 +57,8 @@ class MyPageState extends State<MyPage> {
                 elevation: MaterialStateProperty.all(0.0),
               ),
               onPressed: () async {
-                // SharedPreferences prefs =
-                //     await SharedPreferences.getInstance();
-                // prefs.remove('id');
+                removeString();
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Signin()),

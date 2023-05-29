@@ -14,9 +14,10 @@ dependencies:
     flutter_launcher_icons: ^0.13.1
     dio: ^5.1.2
     retrofit: ^4.0.1
-    json_annotation: ^4.8.0
+    json_annotation: ^4.8.1
     kakao_map_plugin: ^0.1.4
-    # credit_card_scanner: ^1.0.0
+    geolocator: ^9.0.2
+    credit_card_scanner: ^1.0.0
 
 flutter_launcher_icons:
     android: "launcher_icon"

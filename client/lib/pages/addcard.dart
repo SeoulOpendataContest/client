@@ -54,7 +54,6 @@ class AddCardPageState extends State<AddCardPage> {
                 },
                 child: const Text('scan card'),
               ),
-              // print card details when not null
               if (cardDetails != null)
                 Text('Card Number: ${cardDetails!.cardNumber}'),
             ],

@@ -39,7 +39,7 @@ class ChatPageState extends State<ChatPage> {
         },
         child: Image.asset(
           'asset/chating/chat${index.toString()}.png',
-          width: MediaQuery.of(context).size.width * 0.25,
+          width: MediaQuery.of(context).size.width * 0.22,
           height: MediaQuery.of(context).size.width * 0.3,
         ),
       ),
@@ -85,63 +85,87 @@ class ChatPageState extends State<ChatPage> {
         body: Container(
             color: const Color(0xFFFDF8EA),
             child: Center(
-                child: Container(
+                child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.92,
                     child: SingleChildScrollView(
                       child: Column(children: [
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFFFFF),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: const Color(0xFFFFC842),
-                              ),
-                            ),
-                            margin: const EdgeInsets.only(left: 20),
-                            child: Container(
-                              height: 120,
-                              alignment: Alignment.center,
-                              child: const Text(
-                                '안녕하세요! 어깨동무입니다.\n궁금하신 점을 질문해주시면\n답변해드릴게요!\n\n아래의 궁금한 점을 클릭해주세요.',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold),
-                                strutStyle: StrutStyle(
-                                  height: 1.5,
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Stack(
+                          children: [
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                              ),
-                            )),
-                        const SizedBox(height: 10),
-                        Container(
-                          height: MediaQuery.of(context).size.width * 0.7,
-                          decoration: deco,
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  questionButton(1),
-                                  questionButton(2),
-                                  questionButton(3),
-                                ],
-                              ),
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    questionButton(4),
-                                    questionButton(5),
-                                    questionButton(6),
-                                  ]),
-                            ],
-                          ),
+                                Row(children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.32,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                  ),
+                                  Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.545,
+                                      decoration: deco,
+                                      margin: const EdgeInsets.only(left: 20),
+                                      child: Container(
+                                        height: 120,
+                                        alignment: Alignment.center,
+                                        margin: const EdgeInsets.all(10),
+                                        child: const Text(
+                                          '안녕하세요! 어깨동무입니다.\n궁금하신 점을 질문해주시면\n답변해드릴게요!\n\n아래의 궁금한 점을 클릭해주세요.',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold),
+                                          strutStyle: StrutStyle(
+                                            height: 1.5,
+                                          ),
+                                        ),
+                                      ))
+                                ]),
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  decoration: deco,
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          questionButton(1),
+                                          questionButton(2),
+                                          questionButton(3),
+                                        ],
+                                      ),
+                                      Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            questionButton(4),
+                                            questionButton(5),
+                                            questionButton(6),
+                                          ]),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Image.asset(
+                              'asset/character/챗봇서비스.png',
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              height: MediaQuery.of(context).size.width * 0.49,
+                            ),
+                          ],
                         ),
                         Container(
-                          margin: const EdgeInsets.only(top: 20),
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.only(top: 10),
                           child: Text(
                             " ${now.hour}:${now.minute}",
                             style: const TextStyle(
@@ -153,28 +177,28 @@ class ChatPageState extends State<ChatPage> {
                         const SizedBox(height: 10),
                         if (questionIndex > 0)
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Container(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.5,
+                                      MediaQuery.of(context).size.width * 0.6,
                                   decoration: deco,
-                                  margin: const EdgeInsets.only(left: 20),
                                   child: Container(
-                                    height: 120,
-                                    alignment: Alignment.center,
+                                    alignment: Alignment.centerRight,
+                                    margin: const EdgeInsets.all(10),
                                     child: Text(
                                       question[questionIndex - 1],
                                       style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold),
-                                      strutStyle: StrutStyle(
+                                      strutStyle: const StrutStyle(
                                         height: 1.5,
                                       ),
                                     ),
                                   )),
                               Container(
-                                margin: const EdgeInsets.only(top: 20),
+                                margin: const EdgeInsets.only(top: 10),
                                 child: Text(
                                   " ${now.hour}:${now.minute}",
                                   style: const TextStyle(
@@ -183,23 +207,53 @@ class ChatPageState extends State<ChatPage> {
                                   ),
                                 ),
                               ),
-                              Container(
-                                height: 120,
-                                alignment: Alignment.center,
-                                decoration: deco,
-                                child: Text(
-                                  answer[questionIndex - 1],
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                  strutStyle: StrutStyle(
-                                    height: 1.5,
+                              Stack(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 50),
+                                      const Text(
+                                          "                        어깨동무 챗봇 서비스",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold)),
+                                      const SizedBox(height: 5),
+                                      Container(
+                                        height: 120,
+                                        alignment: Alignment.centerLeft,
+                                        decoration: deco,
+                                        child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            margin: const EdgeInsets.all(10),
+                                            child: Text(
+                                              answer[questionIndex - 1],
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold),
+                                              strutStyle: const StrutStyle(
+                                                height: 1.5,
+                                              ),
+                                            )),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ),
+                                  Image.asset(
+                                    'asset/character/챗봇서비스작은버전.png',
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                  ),
+                                ],
+                              )
                             ],
                           ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05)
                       ]),
                     )))));
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 import 'signin.dart';
+import 'api/client.dart';
+import 'api/log_interceptor.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -223,7 +226,24 @@ class SignUpState extends State<SignUp> {
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 formKey.currentState!.save();
-                                print('id: $id, password: $password');
+                                final dio = Dio()
+                                  ..interceptors.add(CustomLogInterceptor());
+                                final restClient = ClientPerson(dio);
+                                var jsondata = {
+                                  "email": id,
+                                  "password": password,
+                                  "nickname": name,
+                                  "checkedPassword": passwordCheck
+                                };
+
+                                restClient
+                                    .signUp(jsondata: jsondata)
+                                    .then((value) {
+                                  print(value);
+                                });
+
+                                print(
+                                    'id: $id, password: $password, passwordCheck: $passwordCheck, name: $name');
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
