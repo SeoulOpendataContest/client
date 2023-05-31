@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
+import 'package:client/util/alert.dart';
 
 import 'app.dart';
 import 'signup.dart';
@@ -26,6 +28,7 @@ class SigninState extends State<Signin> {
   Widget build(BuildContext context) {
     String id = '';
     String password = '';
+    bool login = false;
 
     return Scaffold(
         body: Form(
@@ -36,14 +39,14 @@ class SigninState extends State<Signin> {
                     child: SizedBox(
                         width: MediaQuery.of(context).size.width * 0.9,
                         child: Column(children: [
-                          const SizedBox(height: 80),
+                          const SizedBox(height: 160),
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: const Text(
                               '로그인',
                               style: TextStyle(
                                 fontSize: 25,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w900,
                               ),
                             ),
                           ),
@@ -62,6 +65,7 @@ class SigninState extends State<Signin> {
                               }
                               return null;
                             },
+                            autovalidateMode: AutovalidateMode.always,
                             onSaved: (value) {
                               id = String.fromCharCodes(value!.codeUnits);
                             },
@@ -81,6 +85,7 @@ class SigninState extends State<Signin> {
                               }
                               return null;
                             },
+                            autovalidateMode: AutovalidateMode.always,
                             onSaved: (value) {
                               password = String.fromCharCodes(value!.codeUnits);
                             },
@@ -97,7 +102,9 @@ class SigninState extends State<Signin> {
                                 formKey.currentState!.save();
 
                                 final dio = Dio()
-                                  ..interceptors.add(CustomLogInterceptor());
+                                  ..interceptors.add(
+                                    CustomLogInterceptor(),
+                                  );
                                 final restClient = ClientPerson(dio);
                                 var jsondata = {
                                   "email": id,
@@ -106,18 +113,37 @@ class SigninState extends State<Signin> {
                                 restClient
                                     .login(jsondata: jsondata)
                                     .then((value) {
-                                  print(value);
+                                  setState(() {
+                                    login = value.success;
+                                    setString(id);
+                                    if (login) {
+                                      basicAlertShow(context, AlertType.success,
+                                          "로그인 성공", "어깨동무에 오신 것을 환영합니다.", () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const MainApp()));
+                                      });
+                                    } else {
+                                      basicAlertShow(context, AlertType.error,
+                                          "로그인 실패", value.error?.message, () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Signin()));
+                                      });
+                                    }
+                                  });
                                 });
-
-                                setString(id);
-
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const MainApp()));
                               }
                             },
-                            child: const Text('로그인'),
+                            child: const Text('로그인',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold)),
                           ),
                           const SizedBox(height: 40),
                           Row(

@@ -7,11 +7,85 @@ part of 'client.dart';
 // **************************************************************************
 
 Location _$LocationFromJson(Map<String, dynamic> json) => Location(
-      address_name: json['address_name'] as String,
+      addressName: json['addressName'] as String,
     );
 
 Map<String, dynamic> _$LocationToJson(Location instance) => <String, dynamic>{
-      'address_name': instance.address_name,
+      'addressName': instance.addressName,
+    };
+
+StoreLocation _$StoreLocationFromJson(Map<String, dynamic> json) =>
+    StoreLocation(
+      x: (json['x'] as num).toDouble(),
+      y: (json['y'] as num).toDouble(),
+      type: json['type'] as String,
+      coordinates: (json['coordinates'] as List<dynamic>)
+          .map((e) => (e as num).toDouble())
+          .toList(),
+    );
+
+Map<String, dynamic> _$StoreLocationToJson(StoreLocation instance) =>
+    <String, dynamic>{
+      'x': instance.x,
+      'y': instance.y,
+      'type': instance.type,
+      'coordinates': instance.coordinates,
+    };
+
+StoreInfo _$StoreInfoFromJson(Map<String, dynamic> json) => StoreInfo(
+      category: json['category'] as String,
+      name: json['name'] as String,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      location:
+          StoreLocation.fromJson(json['location'] as Map<String, dynamic>),
+      storeurl: json['storeurl'] as String,
+      storeaddress: json['storeaddress'] as String,
+    );
+
+Map<String, dynamic> _$StoreInfoToJson(StoreInfo instance) => <String, dynamic>{
+      'category': instance.category,
+      'name': instance.name,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'location': instance.location,
+      'storeurl': instance.storeurl,
+      'storeaddress': instance.storeaddress,
+    };
+
+LoginInfo _$LoginInfoFromJson(Map<String, dynamic> json) => LoginInfo(
+      success: json['success'] as bool,
+      data: json['data'] == null
+          ? null
+          : LoginData.fromJson(json['data'] as Map<String, dynamic>),
+      error: json['error'] == null
+          ? null
+          : LoginError.fromJson(json['error'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$LoginInfoToJson(LoginInfo instance) => <String, dynamic>{
+      'success': instance.success,
+      'data': instance.data,
+      'error': instance.error,
+    };
+
+LoginData _$LoginDataFromJson(Map<String, dynamic> json) => LoginData(
+      token: json['token'] as String?,
+    );
+
+Map<String, dynamic> _$LoginDataToJson(LoginData instance) => <String, dynamic>{
+      'token': instance.token,
+    };
+
+LoginError _$LoginErrorFromJson(Map<String, dynamic> json) => LoginError(
+      code: json['code'] as int?,
+      message: json['message'] as String?,
+    );
+
+Map<String, dynamic> _$LoginErrorToJson(LoginError instance) =>
+    <String, dynamic>{
+      'code': instance.code,
+      'message': instance.message,
     };
 
 // **************************************************************************
@@ -33,24 +107,27 @@ class _ClientMap implements ClientMap {
   String? baseUrl;
 
   @override
-  Future<String> getMapLocation({required dynamic jsondata}) async {
+  Future<List<StoreInfo>> getMapStore({required dynamic jsondata}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = jsondata;
-    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<StoreInfo>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/location/find',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data!;
+            .compose(
+              _dio.options,
+              '/location/find',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => StoreInfo.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 
@@ -99,24 +176,25 @@ class _ClientMap implements ClientMap {
   }
 
   @override
-  Future<String> getMapMyLocation({required dynamic jsondata}) async {
+  Future<Location> getMapMyLocation({required dynamic jsondata}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = jsondata;
-    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Location>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/location/mylocation',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data!;
+            .compose(
+              _dio.options,
+              '/location/mylocation',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = Location.fromJson(_result.data!);
     return value;
   }
 
@@ -171,7 +249,30 @@ class _ClientPerson implements ClientPerson {
   }
 
   @override
-  Future<String> login({required dynamic jsondata}) async {
+  Future<LoginInfo> login({required dynamic jsondata}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = jsondata;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<LoginInfo>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/login',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = LoginInfo.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<String> delete({required dynamic jsondata}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -183,7 +284,29 @@ class _ClientPerson implements ClientPerson {
     )
         .compose(
           _dio.options,
-          '/user/login',
+          '/user/delete',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
+    return value;
+  }
+
+  @override
+  Future<String> getCardList({required dynamic jsondata}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = jsondata;
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/user/card/list',
           queryParameters: queryParameters,
           data: _data,
         )

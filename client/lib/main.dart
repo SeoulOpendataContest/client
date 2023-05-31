@@ -34,6 +34,7 @@ class Main extends StatelessWidget {
           primarySwatch: Colors.amber,
           fontFamily: 'NanumSquare'),
       home: istoken ? const MainApp() : const Signin(),
+      //home: const MainApp(),
     );
   }
 }

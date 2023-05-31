@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:client/util/alert.dart';
+import 'package:client/util/agree.dart';
 
 import 'signin.dart';
 import 'api/client.dart';
@@ -20,6 +23,16 @@ class SignUpState extends State<SignUp> {
     String password = '';
     String passwordCheck = '';
     String name = '';
+
+    bool idCheck = false;
+    bool nameCheck = false;
+    bool tmp = false;
+
+    List<String> agreeList = [
+      '이용약관 동의 (필수)',
+      '개인정보 수집 및 이용 동의 (필수)',
+      '위치 정보 이용 동의 (선택)'
+    ];
 
     return Scaffold(
         appBar: AppBar(
@@ -68,21 +81,32 @@ class SignUpState extends State<SignUp> {
                           ),
                           Row(
                             children: [
-                              Container(
+                              SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.58,
                                   child: TextFormField(
                                     decoration: const InputDecoration(
-                                      labelText: '이메일 입력',
                                       hintText: '이메일을 입력하세요',
+                                      helperText: '사용 가능한 특수문자는 (_/-/@/.)입니다.',
+                                      helperStyle: TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                      errorStyle: TextStyle(
+                                        fontSize: 10,
+                                      ),
                                       border: OutlineInputBorder(),
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return '이메일을 입력하세요';
+                                      } else if (value.contains(
+                                          RegExp(r"[^a-zA-Z0-9@._/-]"))) {
+                                        return '사용 가능한 특수문자는 (_/-/@/.)입니다.';
                                       }
+                                      idCheck = true;
                                       return null;
                                     },
+                                    autovalidateMode: AutovalidateMode.always,
                                     onSaved: (value) {
                                       id = String.fromCharCodes(
                                           value!.codeUnits);
@@ -91,14 +115,25 @@ class SignUpState extends State<SignUp> {
                               SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.02),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    minimumSize: Size(
-                                        MediaQuery.of(context).size.width * 0.3,
-                                        60)),
-                                onPressed: () {},
-                                child: const Text('중복확인'),
-                              ),
+                              Column(children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      backgroundColor: idCheck
+                                          ? const Color(0xFFFFC842)
+                                          : const Color(0xFFFFE6A8),
+                                      minimumSize: Size(
+                                          MediaQuery.of(context).size.width *
+                                              0.3,
+                                          60)),
+                                  onPressed: () {},
+                                  child: const Text('중복확인',
+                                      style: TextStyle(fontSize: 12)),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ])
                             ],
                           ),
                           const SizedBox(
@@ -125,16 +160,29 @@ class SignUpState extends State<SignUp> {
                           ),
                           TextFormField(
                             decoration: const InputDecoration(
-                              labelText: '비밀번호 입력',
                               hintText: '비밀번호를 입력하세요',
+                              helperText:
+                                  '영문,숫자,특수문자 중 3가지 이상 의 문자조합 8-32자로 입력해주세요.',
+                              helperStyle: TextStyle(
+                                fontSize: 10,
+                              ),
+                              errorStyle: TextStyle(
+                                fontSize: 10,
+                              ),
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return '비밀번호를 입력하세요';
                               }
+                              // 영문,숫자,특수문자 중 2가지 이상 의 문자조합 8-32자로 입력해주세요.
+                              if (!value.contains(RegExp(
+                                  r"^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,32}$"))) {
+                                return '영문,숫자,특수문자 중 3가지 이상 의 문자조합 8-32자로 입력해주세요.';
+                              }
                               return null;
                             },
+                            autovalidateMode: AutovalidateMode.always,
                             onSaved: (value) {
                               password = String.fromCharCodes(value!.codeUnits);
                             },
@@ -144,8 +192,10 @@ class SignUpState extends State<SignUp> {
                           ),
                           TextFormField(
                             decoration: const InputDecoration(
-                              labelText: '비밀번호 재입력',
                               hintText: '비밀번호를 재입력하세요',
+                              errorStyle: TextStyle(
+                                fontSize: 10,
+                              ),
                               border: OutlineInputBorder(),
                             ),
                             validator: (value) {
@@ -154,6 +204,7 @@ class SignUpState extends State<SignUp> {
                               }
                               return null;
                             },
+                            autovalidateMode: AutovalidateMode.always,
                             onSaved: (value) {
                               passwordCheck =
                                   String.fromCharCodes(value!.codeUnits);
@@ -183,21 +234,32 @@ class SignUpState extends State<SignUp> {
                           ),
                           Row(
                             children: [
-                              Container(
+                              SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.58,
                                   child: TextFormField(
                                     decoration: const InputDecoration(
-                                      labelText: '닉네임 입력',
                                       hintText: '닉네임을 입력하세요',
+                                      helperText: '20자 이내로 입력해주세요.',
+                                      helperStyle: TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                      errorStyle: TextStyle(
+                                        fontSize: 10,
+                                      ),
                                       border: OutlineInputBorder(),
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return '닉네임을 입력하세요';
                                       }
+                                      if (value.length > 20) {
+                                        return '20자 이내로 입력해주세요.';
+                                      }
+                                      nameCheck = true;
                                       return null;
                                     },
+                                    autovalidateMode: AutovalidateMode.always,
                                     onSaved: (value) {
                                       name = String.fromCharCodes(
                                           value!.codeUnits);
@@ -206,21 +268,63 @@ class SignUpState extends State<SignUp> {
                               SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.02),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    minimumSize: Size(
-                                        MediaQuery.of(context).size.width * 0.3,
-                                        60)),
-                                onPressed: () {},
-                                child: const Text('중복확인'),
-                              ),
+                              Column(
+                                children: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: nameCheck
+                                            ? const Color(0xFFFFC842)
+                                            : const Color(0xFFFFE6A8),
+                                        elevation: 0,
+                                        minimumSize: Size(
+                                            MediaQuery.of(context).size.width *
+                                                0.3,
+                                            60)),
+                                    onPressed: () {},
+                                    child: const Text('중복확인',
+                                        style: TextStyle(fontSize: 12)),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  )
+                                ],
+                              )
                             ],
                           ),
                           const SizedBox(
                             height: 40,
                           ),
+
+                          // agree all button
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: const Color(0xFFFFE6A8),
+                                minimumSize: Size(
+                                    MediaQuery.of(context).size.width, 55)),
+                            onPressed: () {
+                              setState(() {});
+                            },
+                            child: const Text('모든 약관 동의',
+                                style: TextStyle(fontSize: 12)),
+                          ),
+
+                          for (int i = 0; i < agreeList.length; i++)
+                            agreeCheckBox(
+                              context,
+                              agreeList[i],
+                              tmp,
+                              (value) {
+                                setState(() {
+                                  tmp = value!;
+                                });
+                              },
+                            ),
+
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: const Color(0xFFFFE6A8),
                                 minimumSize: Size(
                                     MediaQuery.of(context).size.width, 55)),
                             onPressed: () {
@@ -238,20 +342,29 @@ class SignUpState extends State<SignUp> {
 
                                 restClient
                                     .signUp(jsondata: jsondata)
-                                    .then((value) {
-                                  print(value);
-                                });
+                                    .then((value) {});
 
-                                print(
-                                    'id: $id, password: $password, passwordCheck: $passwordCheck, name: $name');
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => const SignUp2()));
+                              } else
+                              // if (agreeAllCheck == false)
+                              {
+                                basicAlertShow(
+                                    context,
+                                    AlertType.error,
+                                    "이용약관 동의",
+                                    "회원가입 시 이용약관 동의와 개인정보 수집 및 이용동의는 필수 입니다. 이용약관에 동의해주세요.",
+                                    () {
+                                  Navigator.pop(context);
+                                });
+                                //
                               }
                             },
                             child: const Text('다음'),
                           ),
+                          const SizedBox(height: 30)
                         ]))))));
   }
 }
@@ -284,27 +397,30 @@ class SignUp2State extends State<SignUp2> {
             color: const Color(0xFFFDF8EA),
             child: Center(
                 child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "회원가입 완료!",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                const Text("지금부터 어깨동무에서",
-                    style:
-                        TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text("언제 어디서나 쉽고 빠르게 사용해보세요!",
-                    style:
-                        TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                const SizedBox(
+                const Column(children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "회원가입 완료!",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text("지금부터 어깨동무에서",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("언제 어디서나 쉽고 빠르게 사용해보세요!",
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                ]),
+                SizedBox(
                   height: 30,
                 ),
                 Image.asset(
@@ -325,6 +441,9 @@ class SignUp2State extends State<SignUp2> {
                             builder: (context) => const Signin()));
                   },
                   child: const Text('완료'),
+                ),
+                const SizedBox(
+                  height: 30,
                 ),
               ],
             ))));

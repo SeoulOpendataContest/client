@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-// import 'package:credit_card_scanner/credit_card_scanner.dart';
+import 'package:credit_card_scanner/credit_card_scanner.dart';
 
 class AddCardPage extends StatefulWidget {
   const AddCardPage({Key? key}) : super(key: key);
@@ -9,10 +9,28 @@ class AddCardPage extends StatefulWidget {
 
 class AddCardPageState extends State<AddCardPage> {
   bool isCard = false;
+  CardDetails? _cardDetails;
+
+  CardScanOptions scanOptions = const CardScanOptions(
+    scanCardHolderName: true,
+    // enableDebugLogs: true,
+    validCardsToScanBeforeFinishingScan: 5,
+    possibleCardHolderNamePositions: [
+      CardHolderNameScanPosition.aboveCardNumber,
+    ],
+  );
+
+  Future<void> scanCard() async {
+    final CardDetails? cardDetails =
+        await CardScanner.scanCard(scanOptions: scanOptions);
+    if (!mounted || cardDetails == null) return;
+    setState(() {
+      _cardDetails = cardDetails;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var cardDetails;
-
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Colors.white,
@@ -43,19 +61,21 @@ class AddCardPageState extends State<AddCardPage> {
               MaterialButton(
                 color: Colors.blue,
                 onPressed: () async {
-                  setState(() {
-                    // cardDetails = CardScanner.scanCard(
-                    //   scanOptions: const CardScanOptions(
-                    //     scanCardHolderName: true,
-                    //   ),
-                    // );
-                  });
-                  print(cardDetails);
+                  await scanCard();
                 },
                 child: const Text('scan card'),
               ),
-              if (cardDetails != null)
-                Text('Card Number: ${cardDetails!.cardNumber}'),
+              _cardDetails == null
+                  ? const Text('No card details found')
+                  : Column(
+                      children: [
+                        Text('${_cardDetails}'),
+                        Text('Card Number: ${_cardDetails?.cardNumber}'),
+                        Text(
+                            'Card Holder Name: ${_cardDetails?.cardHolderName}'),
+                        Text('Card Expiry Date: ${_cardDetails?.expiryDate}'),
+                      ],
+                    ),
             ],
           ),
         ));

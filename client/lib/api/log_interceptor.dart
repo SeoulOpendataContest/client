@@ -21,6 +21,8 @@ class CustomLogInterceptor extends Interceptor {
     if (err.response?.statusCode == 400) {
       print(
           'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}\n');
+      print('DATA : ${err.response?.data}\n');
+
       print('잘못된 요청입니다.');
       return;
     }

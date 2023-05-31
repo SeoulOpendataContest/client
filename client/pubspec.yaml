@@ -18,6 +18,10 @@ dependencies:
     kakao_map_plugin: ^0.1.4
     geolocator: ^9.0.2
     credit_card_scanner: ^1.0.0
+    bottom_sheet: ^3.1.2
+    rflutter_alert: ^2.0.7
+    latlong2: ^0.8.2
+    url_launcher: ^6.1.11
 
 flutter_launcher_icons:
     android: "launcher_icon"
@@ -54,6 +58,7 @@ flutter:
         - asset/store/
         - asset/logo/
         - asset/chating/
+        - asset/agree/
     fonts:
         - family: NanumSquare
           fonts:
