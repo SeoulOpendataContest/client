@@ -54,19 +54,6 @@ class AddCardPageState extends State<AddCardPage> {
   void loadData() async {
     final prefs = await SharedPreferences.getInstance();
     accessToken = prefs.getString('accessToken') ?? '';
-    if (accessToken != '') {
-      try {
-        final dio = Dio()..interceptors.add(CustomLogInterceptor());
-        final restClient = ClientPerson(dio);
-        final response =
-            await restClient.getCardList(jsondata: {"email": accessToken});
-        setState(() {
-          result = response;
-        });
-      } catch (e) {
-        print(e);
-      }
-    }
   }
 
   @override
@@ -95,6 +82,7 @@ class AddCardPageState extends State<AddCardPage> {
               IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
+                  print("Dddddddd");
                   Navigator.pop(context);
                 },
               ),
@@ -477,21 +465,27 @@ class AddCardPageState extends State<AddCardPage> {
                                           ],
                                         )),
                                     () => {
-                                          jsondata = {
-                                            "email": accessToken,
-                                            "cardNumber": cardNumber,
-                                            "cardYear":
-                                                cardExpireDate.substring(0, 2),
-                                            "cardMonth":
-                                                cardExpireDate.substring(3, 5),
-                                            "cardCVC": cardCVC,
-                                            "cardName": cardName
-                                          },
-                                          restClient
-                                              .signUpCard(jsondata: jsondata)
-                                              .then((value) {}),
-                                          // navigator
-                                          Navigator.pop(context)
+                                          if (formKey.currentState!.validate())
+                                            {
+                                              formKey.currentState!.save(),
+                                              jsondata = {
+                                                "email": accessToken,
+                                                "cardNumber": cardNumber,
+                                                "cardYear":
+                                                    "20${cardExpireDate.substring(3, 5)}",
+                                                "cardMonth": cardExpireDate
+                                                    .substring(0, 2),
+                                                "cardCVC": cardCVC,
+                                                "cardName": cardName
+                                              },
+                                              restClient
+                                                  .signUpCard(
+                                                      jsondata: jsondata)
+                                                  .then((value) {}),
+                                              // navigator pop 2 page
+                                              Navigator.pop(context),
+                                              Navigator.pop(context)
+                                            }
                                         }); // 회원가입
                               } else if (agreeAllCheck == false) {
                                 basicAlertShow(

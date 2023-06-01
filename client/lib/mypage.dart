@@ -16,7 +16,7 @@ class MyPage extends StatefulWidget {
 class MyPageState extends State<MyPage> {
   bool isCard = false;
   String accessToken = '';
-  String? result;
+  List<CardContent> result = [];
 
   void loadData() async {
     final prefs = await SharedPreferences.getInstance();

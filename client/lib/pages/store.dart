@@ -16,6 +16,7 @@ class StorePage extends StatefulWidget {
 
 class StorePageState extends State<StorePage> {
   bool screenIndex = true;
+  bool dataloading = true;
 
   Set<Marker> markers = {};
   Set<Circle> circles = {};
@@ -38,6 +39,18 @@ class StorePageState extends State<StorePage> {
     '패스트푸드',
     '제과점',
     '기타'
+  ];
+
+  List<String> searchFilter = [
+    'all',
+    '편의점',
+    '한식',
+    '중식',
+    '일식',
+    '양식',
+    '패스트푸드',
+    '제과점',
+    '일반대중음식'
   ];
 
   Future<Position> getMyLocation() async {
@@ -80,8 +93,8 @@ class StorePageState extends State<StorePage> {
     var jsondata2 = {
       'latitude': mylat.toString(),
       'longitude': mylong.toString(),
-      'distance': '300',
-      'category': 'all'
+      'distance': '100',
+      'category': searchFilter[currentFilter],
     };
     restClient.getMapStore(jsondata: jsondata2).then((value) {
       // save
@@ -104,6 +117,8 @@ class StorePageState extends State<StorePage> {
         }
       });
     });
+
+    // while loading map, return
 
     return position;
   }
@@ -223,7 +238,14 @@ class StorePageState extends State<StorePage> {
                   )),
               onPressed: () {
                 setState(() {
+                  dataloading = true;
+                });
+                setState(() {
                   currentFilter = tmp;
+                  getMyLocation();
+                });
+                setState(() {
+                  dataloading = false;
                 });
                 Navigator.pop(context);
               },
@@ -290,7 +312,14 @@ class StorePageState extends State<StorePage> {
                   child: FloatingActionButton(
                     backgroundColor: Colors.white,
                     onPressed: () async {
+                      setState(() {
+                        dataloading = true;
+                      });
                       await getMyLocation();
+                      setState(() {
+                        dataloading = false;
+                      });
+
                       mapController.setCenter(LatLng(mylat, mylong));
 
                       markers.clear();
@@ -427,7 +456,7 @@ class StorePageState extends State<StorePage> {
                   width: MediaQuery.of(context).size.width,
                   height: 1,
                   color: const Color(0xFFE2E2E2)),
-              if (storeInfo == [])
+              if (dataloading)
                 const Center(
                     child: CircularProgressIndicator(
                         backgroundColor: Colors.black))

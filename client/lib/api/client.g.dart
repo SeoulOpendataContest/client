@@ -89,14 +89,18 @@ Map<String, dynamic> _$LoginErrorToJson(LoginError instance) =>
     };
 
 CardContent _$CardContentFromJson(Map<String, dynamic> json) => CardContent(
+      cardNumber: json['cardNumber'] as String?,
       createdDate: json['createdDate'] as String?,
       modifiedDate: json['modifiedDate'] as String?,
       id: json['id'] as int?,
-      cardNumber: json['cardNumber'] as String?,
       balance: json['balance'] as String?,
       usage: json['usage'] as String?,
       price: json['price'] as String?,
       priceTime: json['priceTime'] as String?,
+      cardYear: json['cardYear'] as String?,
+      cardMonth: json['cardMonth'] as String?,
+      cardCVC: json['cardCVC'] as String?,
+      cardName: json['cardName'] as String?,
     );
 
 Map<String, dynamic> _$CardContentToJson(CardContent instance) =>
@@ -109,20 +113,10 @@ Map<String, dynamic> _$CardContentToJson(CardContent instance) =>
       'usage': instance.usage,
       'price': instance.price,
       'priceTime': instance.priceTime,
-    };
-
-MyCard _$MyCardFromJson(Map<String, dynamic> json) => MyCard(
-      cardNumber: json['cardNumber'] as String,
-      cardYear: json['cardYear'] as String,
-      cardMonth: json['cardMonth'] as String,
-      cardCVC: json['cardCVC'] as String,
-    );
-
-Map<String, dynamic> _$MyCardToJson(MyCard instance) => <String, dynamic>{
-      'cardNumber': instance.cardNumber,
       'cardYear': instance.cardYear,
       'cardMonth': instance.cardMonth,
       'cardCVC': instance.cardCVC,
+      'cardName': instance.cardName,
     };
 
 // **************************************************************************
@@ -331,24 +325,27 @@ class _ClientPerson implements ClientPerson {
   }
 
   @override
-  Future<String> getCardList({required dynamic jsondata}) async {
+  Future<List<CardContent>> getCardList({required dynamic jsondata}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = jsondata;
-    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<CardContent>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/user/card/list',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data!;
+            .compose(
+              _dio.options,
+              '/user/card/list',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => CardContent.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 
@@ -444,13 +441,13 @@ class _ClientPerson implements ClientPerson {
   }
 
   @override
-  Future<MyCard> updateCard({required dynamic jsondata}) async {
+  Future<List<CardContent>> updateCard({required dynamic jsondata}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = jsondata;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<MyCard>(Options(
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<CardContent>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -462,18 +459,20 @@ class _ClientPerson implements ClientPerson {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = MyCard.fromJson(_result.data!);
+    var value = _result.data!
+        .map((dynamic i) => CardContent.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 
   @override
-  Future<MyCard> checkWeekUsage({required dynamic jsondata}) async {
+  Future<CardContent> checkWeekUsage({required dynamic jsondata}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = jsondata;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<MyCard>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CardContent>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -485,18 +484,18 @@ class _ClientPerson implements ClientPerson {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = MyCard.fromJson(_result.data!);
+    final value = CardContent.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<MyCard> checkMonthUsage({required dynamic jsondata}) async {
+  Future<CardContent> checkMonthUsage({required dynamic jsondata}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = jsondata;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<MyCard>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CardContent>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -508,7 +507,7 @@ class _ClientPerson implements ClientPerson {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = MyCard.fromJson(_result.data!);
+    final value = CardContent.fromJson(_result.data!);
     return value;
   }
 
