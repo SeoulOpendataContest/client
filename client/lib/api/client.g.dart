@@ -249,8 +249,6 @@ class _ClientMap implements ClientMap {
   }
 }
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
-
 class _ClientPerson implements ClientPerson {
   _ClientPerson(
     this._dio, {

@@ -42,7 +42,7 @@ class MyPageState extends State<MyPage> {
   void deleteData() async {
     final prefs = await SharedPreferences.getInstance();
     accessToken = prefs.getString('accessToken') ?? '';
-    if (accessToken != null) {
+    if (accessToken != '') {
       try {
         final dio = Dio()..interceptors.add(CustomLogInterceptor());
         final restClient = ClientPerson(dio);

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 Widget agreeCheckBox(context, title, tmp, onChanged) {
   String text = '';
   Future<String> loadTextAsset() async {
-    return await rootBundle.loadString('asset/agree/${title}.txt');
+    return await rootBundle.loadString('asset/agree/$title.txt');
   }
 
   loadTextAsset().then((value) {

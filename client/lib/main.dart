@@ -23,7 +23,6 @@ class Main extends StatelessWidget {
     prefs.then((value) {
       if (value.getString('accessToken') != null) {
         istoken = true;
-        print(value.getString('accessToken'));
       }
     });
 

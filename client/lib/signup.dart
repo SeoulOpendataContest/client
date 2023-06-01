@@ -34,8 +34,6 @@ class SignUpState extends State<SignUp> {
       '위치 정보 이용 동의 (필수)'
     ];
 
-    String result = '';
-
     void CheckId(id) async {
       try {
         final dio = Dio()..interceptors.add(CustomLogInterceptor());
@@ -507,7 +505,7 @@ class SignUp2State extends State<SignUp2> {
                       style:
                           TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
                 ]),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Image.asset(

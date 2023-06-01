@@ -62,7 +62,6 @@ class HomePageState extends State<HomePage> {
         });
         setState(() {
           mycard = response;
-          print("\n\n\n\nmycard : $mycard");
           if (mycard != null) loadcard();
         });
       } catch (e) {
@@ -84,7 +83,6 @@ class HomePageState extends State<HomePage> {
         });
         setState(() {
           cardcontent = response;
-          print("cardcontent : $cardcontent");
         });
       } catch (e) {
         print(e);
@@ -172,24 +170,22 @@ class HomePageState extends State<HomePage> {
                                             ))
                                       ],
                                     ),
-                                    Container(
-                                      child: Text(
-                                        "${cardcontent?[0].balance}",
-                                        style: const TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                    Text(
+                                      "${cardcontent?[0].balance}",
+                                      style: const TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text("일부 금액 사용량이 "),
+                                        const Text("일부 금액 사용량이 "),
                                         Text("$remainingDays일 ",
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Color(0xFF42CE00))),
-                                        Text("남았어요!")
+                                        const Text("남았어요!")
                                       ],
                                     ),
                                     const SizedBox(height: 0),
@@ -253,13 +249,13 @@ class HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                       height: MediaQuery.of(context).size.height * 0.27,
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: ListView.builder(
                         itemCount: cardcontent?.length ?? 0,
                         itemBuilder: (BuildContext context, int index) {
-                          return Container(
+                          return SizedBox(
                             height: 70,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

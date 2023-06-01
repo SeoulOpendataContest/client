@@ -9,7 +9,6 @@ import 'package:client/util/alert.dart';
 
 import '../api/client.dart';
 import '../api/log_interceptor.dart';
-import 'home.dart';
 
 class AddCardPage extends StatefulWidget {
   const AddCardPage({Key? key}) : super(key: key);
@@ -82,7 +81,6 @@ class AddCardPageState extends State<AddCardPage> {
               IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
-                  print("Dddddddd");
                   Navigator.pop(context);
                 },
               ),
@@ -403,12 +401,11 @@ class AddCardPageState extends State<AddCardPage> {
                               if (formKey.currentState!.validate() &&
                                   agreeAllCheck) {
                                 formKey.currentState!.save();
-                                print("dddd : $cardExpireDate");
 
                                 final dio = Dio()
                                   ..interceptors.add(CustomLogInterceptor());
                                 final restClient = ClientPerson(dio);
-                                var jsondata;
+                                dynamic jsondata;
                                 basicAlertShow(
                                     context,
                                     AlertType.info,

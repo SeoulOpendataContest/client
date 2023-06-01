@@ -290,89 +290,88 @@ class KindStorePageState extends State<KindStorePage> {
                 ),
               ],
             ),
-            body: Container(
-              child: Stack(children: [
-                KakaoMap(
-                    onMapCreated: ((controller) async {
-                      mapController = controller;
+            body: Stack(children: [
+              KakaoMap(
+                  onMapCreated: ((controller) async {
+                    mapController = controller;
 
-                      markers.add(Marker(
-                        markerId: UniqueKey().toString(),
-                        latLng: await mapController.getCenter(),
-                      ));
-                    }),
-                    markers: markers.toList(),
-                    circles: circles.toList(),
-                    center: LatLng(mylat, mylong)),
-                Positioned(
-                  bottom: 20,
-                  left: 20,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: () async {
-                      setState(() {
-                        dataloading = true;
-                      });
-                      await getMyLocation();
-                      setState(() {
-                        dataloading = false;
-                      });
+                    markers.add(Marker(
+                      markerId: UniqueKey().toString(),
+                      latLng: await mapController.getCenter(),
+                    ));
+                  }),
+                  markers: markers.toList(),
+                  circles: circles.toList(),
+                  center: LatLng(mylat, mylong)),
+              Positioned(
+                bottom: 20,
+                left: 20,
+                child: FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  onPressed: () async {
+                    setState(() {
+                      dataloading = true;
+                    });
+                    await getMyLocation();
+                    setState(() {
+                      dataloading = false;
+                    });
 
-                      mapController.setCenter(LatLng(mylat, mylong));
+                    mapController.setCenter(LatLng(mylat, mylong));
 
-                      markers.clear();
-                      markers.add(Marker(
-                        markerId: UniqueKey().toString(),
-                        latLng: LatLng(mylat, mylong),
-                      ));
-                      circles.clear();
-                      circles.add(
-                        Circle(
-                          circleId: circles.length.toString(),
-                          center: LatLng(mylat, mylong),
-                          strokeWidth: 3,
-                          strokeColor: const Color(0xFFFFC942),
-                          strokeOpacity: 0.5,
-                          fillColor: const Color(0xFFFFC942),
-                          fillOpacity: 0.2,
-                          radius: 150,
+                    markers.clear();
+                    markers.add(Marker(
+                      markerId: UniqueKey().toString(),
+                      latLng: LatLng(mylat, mylong),
+                    ));
+                    circles.clear();
+                    circles.add(
+                      Circle(
+                        circleId: circles.length.toString(),
+                        center: LatLng(mylat, mylong),
+                        strokeWidth: 3,
+                        strokeColor: const Color(0xFFFFC942),
+                        strokeOpacity: 0.5,
+                        fillColor: const Color(0xFFFFC942),
+                        fillOpacity: 0.2,
+                        radius: 150,
+                      ),
+                    );
+                  },
+                  child: const Icon(Icons.location_searching,
+                      color: Color(0xFF1CDF53)),
+                ),
+              ),
+              Positioned(
+                bottom: 20,
+                left: MediaQuery.of(context).size.width / 2 - 70,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    fixedSize: MaterialStateProperty.all(const Size(140, 35)),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      screenIndex = false;
+                    });
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(Icons.menu, color: Colors.black),
+                      SizedBox(width: 10),
+                      Text(
+                        '리스트 보기',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
                         ),
-                      );
-                    },
-                    child: const Icon(Icons.location_searching,
-                        color: Color(0xFF1CDF53)),
+                      ),
+                    ],
                   ),
                 ),
-                Positioned(
-                  bottom: 20,
-                  left: MediaQuery.of(context).size.width / 2 - 70,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.white),
-                      fixedSize: MaterialStateProperty.all(const Size(140, 35)),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        screenIndex = false;
-                      });
-                    },
-                    child: const Row(
-                      children: [
-                        Icon(Icons.menu, color: Colors.black),
-                        SizedBox(width: 10),
-                        Text(
-                          '리스트 보기',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
-            ))
+              ),
+            ]),
+          )
         : Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
