@@ -1,3 +1,4 @@
 {
-	"cmake.sourceDirectory": "C:/project/Seoul-Open-Data-Contest/client/linux"
+	"cmake.sourceDirectory": "C:/project/Seoul-Open-Data-Contest/client/linux",
+	"java.configuration.updateBuildConfiguration": "automatic"
 }

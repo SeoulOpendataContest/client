@@ -41,6 +41,7 @@ StoreInfo _$StoreInfoFromJson(Map<String, dynamic> json) => StoreInfo(
           StoreLocation.fromJson(json['location'] as Map<String, dynamic>),
       storeurl: json['storeurl'] as String,
       storeaddress: json['storeaddress'] as String,
+      benefit: json['benefit'] as String?,
     );
 
 Map<String, dynamic> _$StoreInfoToJson(StoreInfo instance) => <String, dynamic>{
@@ -51,6 +52,7 @@ Map<String, dynamic> _$StoreInfoToJson(StoreInfo instance) => <String, dynamic>{
       'location': instance.location,
       'storeurl': instance.storeurl,
       'storeaddress': instance.storeaddress,
+      'benefit': instance.benefit,
     };
 
 LoginInfo _$LoginInfoFromJson(Map<String, dynamic> json) => LoginInfo(
@@ -185,24 +187,28 @@ class _ClientMap implements ClientMap {
   }
 
   @override
-  Future<String> getMapGoodVibeStoreFind({required dynamic jsondata}) async {
+  Future<List<StoreInfo>> getMapGoodVibeStoreFind(
+      {required dynamic jsondata}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = jsondata;
-    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<StoreInfo>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/location/goodvibestorefind',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data!;
+            .compose(
+              _dio.options,
+              '/location/goodvibestorefind',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => StoreInfo.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 

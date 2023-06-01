@@ -31,8 +31,38 @@ class SignUpState extends State<SignUp> {
     List<String> agreeList = [
       '이용약관 동의 (필수)',
       '개인정보 수집 및 이용 동의 (필수)',
-      '위치 정보 이용 동의 (선택)'
+      '위치 정보 이용 동의 (필수)'
     ];
+
+    String result = '';
+
+    void CheckId(id) async {
+      try {
+        final dio = Dio()..interceptors.add(CustomLogInterceptor());
+        final restClient = ClientPerson(dio);
+        final response = await restClient.checkEmail(jsondata: {
+          "email": id,
+        });
+        setState(() {});
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    void CheckName(name) async {
+      try {
+        final dio = Dio()..interceptors.add(CustomLogInterceptor());
+        final restClient = ClientPerson(dio);
+        final response = await restClient.checkNickname(jsondata: {
+          "email": id,
+        });
+        setState(() {
+          idCheck = true;
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -126,7 +156,27 @@ class SignUpState extends State<SignUp> {
                                           MediaQuery.of(context).size.width *
                                               0.3,
                                           60)),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    formKey.currentState!.save();
+                                    CheckId(id);
+                                    idCheck
+                                        ? basicAlertShow(
+                                            context,
+                                            AlertType.success,
+                                            "아이디",
+                                            "사용가능한 아이디입니다.",
+                                            const SizedBox(), () {
+                                            Navigator.pop(context);
+                                          })
+                                        : basicAlertShow(
+                                            context,
+                                            AlertType.error,
+                                            "아이디",
+                                            "이미 사용중인 이메일입니다.",
+                                            const SizedBox(), () {
+                                            Navigator.pop(context);
+                                          });
+                                  },
                                   child: const Text('중복확인',
                                       style: TextStyle(fontSize: 12)),
                                 ),
@@ -280,7 +330,27 @@ class SignUpState extends State<SignUp> {
                                             MediaQuery.of(context).size.width *
                                                 0.3,
                                             60)),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      formKey.currentState!.save();
+                                      CheckName(nameCheck);
+                                      nameCheck
+                                          ? basicAlertShow(
+                                              context,
+                                              AlertType.success,
+                                              "닉네임",
+                                              "사용가능한 닉네임입니다.",
+                                              const SizedBox(), () {
+                                              Navigator.pop(context);
+                                            })
+                                          : basicAlertShow(
+                                              context,
+                                              AlertType.error,
+                                              "닉네임",
+                                              "이미 사용중인 닉네임입니다.",
+                                              const SizedBox(), () {
+                                              Navigator.pop(context);
+                                            });
+                                    },
                                     child: const Text('중복확인',
                                         style: TextStyle(fontSize: 12)),
                                   ),

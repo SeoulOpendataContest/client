@@ -15,7 +15,7 @@ abstract class ClientMap {
   Future<String> getMapNameSearch({@Body() required jsondata});
 
   @GET('/location/goodvibestorefind')
-  Future<String> getMapGoodVibeStoreFind({@Body() required jsondata});
+  Future<List<StoreInfo>> getMapGoodVibeStoreFind({@Body() required jsondata});
 
   @GET('/location/mylocation')
   Future<Location> getMapMyLocation({@Body() required jsondata});
@@ -91,15 +91,15 @@ class StoreLocation {
 
 @JsonSerializable()
 class StoreInfo {
-  StoreInfo({
-    required this.category,
-    required this.name,
-    required this.latitude,
-    required this.longitude,
-    required this.location,
-    required this.storeurl,
-    required this.storeaddress,
-  });
+  StoreInfo(
+      {required this.category,
+      required this.name,
+      required this.latitude,
+      required this.longitude,
+      required this.location,
+      required this.storeurl,
+      required this.storeaddress,
+      this.benefit});
 
   String category;
   String name;
@@ -108,6 +108,7 @@ class StoreInfo {
   StoreLocation location;
   String storeurl;
   String storeaddress;
+  String? benefit;
 
   factory StoreInfo.fromJson(Map<String, dynamic> json) =>
       _$StoreInfoFromJson(json);

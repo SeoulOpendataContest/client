@@ -318,7 +318,7 @@ class AddCardPageState extends State<AddCardPage> {
                               children: [
                                 agreeCheckBox(
                                   context,
-                                  '어깨동무 개인(신용)정보 수집 및 이용 동의 (필수)',
+                                  '어깨동무 개인(신용)정보 수집 및 이용 동 (필수)',
                                   agreeCheck[0],
                                   (value) {
                                     setState(() {
@@ -339,7 +339,7 @@ class AddCardPageState extends State<AddCardPage> {
                                 ),
                                 agreeCheckBox(
                                   context,
-                                  '어깨동무 개인(신용)정보 수집 및 이용 동의 (필수)',
+                                  '어깨동무→신한카드 개인(신용)정보 제공 동의 (필수)',
                                   agreeCheck[1],
                                   (value) {
                                     setState(() {

@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 Widget agreeCheckBox(context, title, tmp, onChanged) {
+  String text = '';
+  Future<String> loadTextAsset() async {
+    return await rootBundle.loadString('asset/agree/${title}.txt');
+  }
+
+  loadTextAsset().then((value) {
+    text = value;
+  });
+
   return Row(children: [
     SizedBox(
         width: MediaQuery.of(context).size.width * 0.7,
@@ -21,7 +31,7 @@ Widget agreeCheckBox(context, title, tmp, onChanged) {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text(title),
-                  content: const Text('약관 내용이 들어갈 공간입니다.'),
+                  content: SingleChildScrollView(child: Text(text)),
                   actions: [
                     TextButton(
                         onPressed: () {
