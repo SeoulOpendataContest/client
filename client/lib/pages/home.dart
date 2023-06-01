@@ -17,6 +17,8 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   String accessToken = '';
   String? result;
+  MyCard? mycard;
+  List<CardContent>? cardcontent;
 
   void loadData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -29,6 +31,46 @@ class HomePageState extends State<HomePage> {
             await restClient.getCardList(jsondata: {"email": accessToken});
         setState(() {
           result = response;
+          if (result != null) {
+            getcard();
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  void loadcard() async {
+    final prefs = await SharedPreferences.getInstance();
+    accessToken = prefs.getString('accessToken') ?? '';
+    if (accessToken != '') {
+      try {
+        final dio = Dio()..interceptors.add(CustomLogInterceptor());
+        final restClient = ClientPerson(dio);
+        final response =
+            await restClient.checkUsage(jsondata: {"email": accessToken});
+        setState(() {
+          cardcontent = response;
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  void getcard() async {
+    final prefs = await SharedPreferences.getInstance();
+    accessToken = prefs.getString('accessToken') ?? '';
+    if (accessToken != '') {
+      try {
+        final dio = Dio()..interceptors.add(CustomLogInterceptor());
+        final restClient = ClientPerson(dio);
+        final response =
+            await restClient.updateCard(jsondata: {"email": accessToken});
+        setState(() {
+          mycard = response;
+          if (result != null) loadcard();
         });
       } catch (e) {
         print(e);
@@ -79,7 +121,7 @@ class HomePageState extends State<HomePage> {
                       const SizedBox(height: 50),
                       const Text("서울시님, 안녕하세요."),
                       const SizedBox(height: 10),
-                      result == null
+                      result != null
                           ? const Text("잔액조회 및 이용내역을 확인해보세요.")
                           : const Text("지금 바로 서울시꿈나무카드를 등록해보세요."),
                       const SizedBox(height: 30),
@@ -94,26 +136,29 @@ class HomePageState extends State<HomePage> {
                             width: 1,
                           ),
                         ),
-                        child: result == null
-                            ? const Text("카드있음")
+                        child: result != null
+                            ? Container(
+                                // child: Text("잔액 : ${cardcontent?[0].usage}"),
+                                )
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   FloatingActionButton(
-                                    backgroundColor: const Color(0xFfFFC842),
-                                    elevation: 0,
-                                    child: const Icon(Icons.add,
-                                        color: Colors.black, size: 30),
-                                    onPressed: () async {
-                                      setState(() {
-                                        //isCard = true;
-                                      });
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return const AddCardPage();
-                                      }));
-                                    },
-                                  ),
+                                      backgroundColor: const Color(0xFfFFC842),
+                                      elevation: 0,
+                                      child: const Icon(Icons.add,
+                                          color: Colors.black, size: 30),
+                                      onPressed: () async {
+                                        setState(() {
+                                          //isCard = true;
+                                        });
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return const AddCardPage();
+                                        }));
+                                        loadData();
+                                      }),
                                   const SizedBox(height: 10),
                                   const Text("서울시꿈나무 카드 등록",
                                       style: TextStyle(
@@ -130,7 +175,7 @@ class HomePageState extends State<HomePage> {
                       const SizedBox(height: 30),
                     ]))),
         Container(height: 5, color: const Color(0xFFE9E9E9)),
-        result == null ? const Text("카드있음") : const SizedBox(),
+        result != null ? const Text("카드있음") : const SizedBox(),
       ]),
     );
   }

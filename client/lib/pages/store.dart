@@ -3,7 +3,6 @@ import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:dio/dio.dart';
 import 'package:bottom_sheet/bottom_sheet.dart';
-import 'package:kakao_map_plugin/kakao_map_plugin_platform_interface.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../api/client.dart';
@@ -81,7 +80,7 @@ class StorePageState extends State<StorePage> {
     var jsondata2 = {
       'latitude': mylat.toString(),
       'longitude': mylong.toString(),
-      'distance': '1000',
+      'distance': '300',
       'category': 'all'
     };
     restClient.getMapStore(jsondata: jsondata2).then((value) {

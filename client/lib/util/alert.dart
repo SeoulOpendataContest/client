@@ -2,7 +2,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter/material.dart';
 
 void basicAlertShow(BuildContext context, AlertType type, String title,
-    String? desc, Function() onPressed) {
+    String? desc, Widget content, Function() onPressed) {
   Alert(
     context: context,
     type: type,
@@ -12,6 +12,7 @@ void basicAlertShow(BuildContext context, AlertType type, String title,
       titleStyle: TextStyle(color: Colors.black, fontSize: 15),
       descStyle: TextStyle(color: Colors.grey, fontSize: 12),
     ),
+    content: content,
     buttons: [
       DialogButton(
         onPressed: () => onPressed(),

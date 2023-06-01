@@ -16,6 +16,10 @@ class SignUp extends StatefulWidget {
 
 class SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
+  bool idCheck = false;
+  bool nameCheck = false;
+  bool agreeAllCheck = false;
+  List<bool> agreeCheck = [false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +27,6 @@ class SignUpState extends State<SignUp> {
     String password = '';
     String passwordCheck = '';
     String name = '';
-
-    bool idCheck = false;
-    bool nameCheck = false;
-    bool tmp = false;
 
     List<String> agreeList = [
       '이용약관 동의 (필수)',
@@ -299,11 +299,18 @@ class SignUpState extends State<SignUp> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 elevation: 0,
-                                backgroundColor: const Color(0xFFFFE6A8),
+                                backgroundColor: agreeAllCheck
+                                    ? const Color(0xFFFFC842)
+                                    : const Color(0xFFFFE6A8),
                                 minimumSize: Size(
                                     MediaQuery.of(context).size.width, 55)),
                             onPressed: () {
-                              setState(() {});
+                              setState(() {
+                                for (int i = 0; i < agreeCheck.length; i++) {
+                                  agreeCheck[i] = true;
+                                }
+                                agreeAllCheck = true;
+                              });
                             },
                             child: const Text('모든 약관 동의',
                                 style: TextStyle(fontSize: 12)),
@@ -313,10 +320,19 @@ class SignUpState extends State<SignUp> {
                             agreeCheckBox(
                               context,
                               agreeList[i],
-                              tmp,
+                              agreeCheck[i],
                               (value) {
                                 setState(() {
-                                  tmp = value!;
+                                  agreeCheck[i] = value!;
+
+                                  bool check = true;
+                                  for (int i = 0; i < agreeCheck.length; i++) {
+                                    if (agreeCheck[i] == false) {
+                                      check = false;
+                                      break;
+                                    }
+                                  }
+                                  agreeAllCheck = check;
                                 });
                               },
                             ),
@@ -324,11 +340,14 @@ class SignUpState extends State<SignUp> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 elevation: 0,
-                                backgroundColor: const Color(0xFFFFE6A8),
+                                backgroundColor: agreeAllCheck
+                                    ? const Color(0xFFFFC842)
+                                    : const Color(0xFFFFE6A8),
                                 minimumSize: Size(
                                     MediaQuery.of(context).size.width, 55)),
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
+                              if (formKey.currentState!.validate() &&
+                                  agreeAllCheck) {
                                 formKey.currentState!.save();
                                 final dio = Dio()
                                   ..interceptors.add(CustomLogInterceptor());
@@ -348,15 +367,13 @@ class SignUpState extends State<SignUp> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => const SignUp2()));
-                              } else
-                              // if (agreeAllCheck == false)
-                              {
+                              } else if (agreeAllCheck == false) {
                                 basicAlertShow(
                                     context,
                                     AlertType.error,
                                     "이용약관 동의",
                                     "회원가입 시 이용약관 동의와 개인정보 수집 및 이용동의는 필수 입니다. 이용약관에 동의해주세요.",
-                                    () {
+                                    const SizedBox(), () {
                                   Navigator.pop(context);
                                 });
                                 //

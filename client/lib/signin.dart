@@ -117,8 +117,12 @@ class SigninState extends State<Signin> {
                                     login = value.success;
                                     setString(id);
                                     if (login) {
-                                      basicAlertShow(context, AlertType.success,
-                                          "로그인 성공", "어깨동무에 오신 것을 환영합니다.", () {
+                                      basicAlertShow(
+                                          context,
+                                          AlertType.success,
+                                          "로그인 성공",
+                                          "어깨동무에 오신 것을 환영합니다.",
+                                          const SizedBox(), () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -126,8 +130,12 @@ class SigninState extends State<Signin> {
                                                     const MainApp()));
                                       });
                                     } else {
-                                      basicAlertShow(context, AlertType.error,
-                                          "로그인 실패", value.error?.message, () {
+                                      basicAlertShow(
+                                          context,
+                                          AlertType.error,
+                                          "로그인 실패",
+                                          value.error?.message,
+                                          const SizedBox(), () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
