@@ -283,12 +283,6 @@ class KindStorePageState extends State<KindStorePage> {
                     color: Colors.black),
               ),
               centerTitle: true,
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {},
-                ),
-              ],
             ),
             body: Stack(children: [
               KakaoMap(
@@ -394,12 +388,6 @@ class KindStorePageState extends State<KindStorePage> {
                     color: Colors.black),
               ),
               centerTitle: true,
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {},
-                ),
-              ],
             ),
             body: Column(children: [
               Row(
@@ -454,9 +442,16 @@ class KindStorePageState extends State<KindStorePage> {
                   height: 1,
                   color: const Color(0xFFE2E2E2)),
               if (dataloading)
-                const Center(
-                    child: CircularProgressIndicator(
-                        backgroundColor: Colors.black))
+                const Column(children: [
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Center(child: CircularProgressIndicator()),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text("지도에서 위치 새로고침 버튼을 누르고 기다려주세요!")
+                ])
               else
                 Expanded(
                     child: ListView.separated(

@@ -10,6 +10,8 @@ import 'package:client/util/alert.dart';
 import '../api/client.dart';
 import '../api/log_interceptor.dart';
 
+import 'home.dart';
+
 class AddCardPage extends StatefulWidget {
   const AddCardPage({Key? key}) : super(key: key);
   @override

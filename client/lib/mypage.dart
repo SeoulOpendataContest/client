@@ -86,104 +86,125 @@ class MyPageState extends State<MyPage> {
           centerTitle: true,
         ),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
-              height: 200,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Row(children: [
-                      SizedBox(width: 20),
-                      Text("안녕하세요, ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20))
-                    ]),
-                    const SizedBox(height: 10),
-                    Row(children: [
-                      const SizedBox(width: 20),
-                      const Text("어깨동무 님",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20)),
-                      const SizedBox(width: 10),
-                      // edit icon
+            Column(
+              children: [
+                SizedBox(
+                  height: 200,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Row(children: [
+                          SizedBox(width: 20),
+                          Text("안녕하세요, ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20))
+                        ]),
+                        const SizedBox(height: 10),
+                        Row(children: [
+                          const SizedBox(width: 20),
+                          const Text("어깨동무 님",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20)),
+                          const SizedBox(width: 10),
+                          // edit icon
 
-                      ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white),
-                            overlayColor: MaterialStateProperty.all(
-                                const Color.fromARGB(255, 246, 246, 246)),
-                            elevation: MaterialStateProperty.all(0.0),
-                          ),
-                          onPressed: () {},
-                          child: const Row(
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                color: Colors.grey,
-                                size: 15,
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.white),
+                                overlayColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 246, 246, 246)),
+                                elevation: MaterialStateProperty.all(0.0),
                               ),
-                              SizedBox(width: 5),
-                              Text('닉네임 수정하기',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 10)),
-                            ],
-                          ))
-                    ])
+                              onPressed: () {},
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.edit,
+                                    color: Colors.grey,
+                                    size: 15,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text('닉네임 수정하기',
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 10)),
+                                ],
+                              ))
+                        ])
+                      ]),
+                ),
+                Container(height: 8, color: const Color(0xFFE9E9E9)),
+                // log out button
+                ElevatedButton(
+                  style: ButtonStyle(
+                    alignment: Alignment.centerLeft,
+                    fixedSize: MaterialStateProperty.all(
+                      Size(MediaQuery.of(context).size.width, 50),
+                    ),
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    overlayColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 246, 246, 246)),
+                    elevation: MaterialStateProperty.all(0.0),
+                  ),
+                  onPressed: () async {
+                    removeString();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Signin()),
+                    );
+                  },
+                  child: const Row(children: [
+                    SizedBox(width: 10),
+                    Text('로그아웃', style: TextStyle(fontWeight: FontWeight.bold))
                   ]),
-            ),
-            Container(height: 8, color: const Color(0xFFE9E9E9)),
-            // log out button
-            ElevatedButton(
-              style: ButtonStyle(
-                alignment: Alignment.centerLeft,
-                fixedSize: MaterialStateProperty.all(
-                  Size(MediaQuery.of(context).size.width, 50),
                 ),
-                backgroundColor: MaterialStateProperty.all(Colors.white),
-                overlayColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 246, 246, 246)),
-                elevation: MaterialStateProperty.all(0.0),
-              ),
-              onPressed: () async {
-                removeString();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Signin()),
-                );
-              },
-              child: const Row(children: [
-                SizedBox(width: 10),
-                Text('로그아웃', style: TextStyle(fontWeight: FontWeight.bold))
-              ]),
-            ),
-            Container(height: 8, color: const Color(0xFFE9E9E9)),
-            ElevatedButton(
-              style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all(
-                  Size(MediaQuery.of(context).size.width, 50),
+                Container(height: 8, color: const Color(0xFFE9E9E9)),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all(
+                      Size(MediaQuery.of(context).size.width, 50),
+                    ),
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    overlayColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 246, 246, 246)),
+                    elevation: MaterialStateProperty.all(0.0),
+                  ),
+                  onPressed: () async {
+                    deleteData();
+                    removeString();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Signin()),
+                    );
+                  },
+                  child: const Row(children: [
+                    SizedBox(width: 10),
+                    Text('탈퇴하기', style: TextStyle(fontWeight: FontWeight.bold))
+                  ]),
                 ),
-                backgroundColor: MaterialStateProperty.all(Colors.white),
-                overlayColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 246, 246, 246)),
-                elevation: MaterialStateProperty.all(0.0),
-              ),
-              onPressed: () async {
-                deleteData();
-                removeString();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Signin()),
-                );
-              },
-              child: const Row(children: [
-                SizedBox(width: 10),
-                Text('탈퇴하기', style: TextStyle(fontWeight: FontWeight.bold))
-              ]),
+                Container(height: 8, color: const Color(0xFFE9E9E9)),
+              ],
             ),
-            Container(height: 8, color: const Color(0xFFE9E9E9)),
+            const Row(children: [
+              SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('사업자 정보', style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10),
+                  Text("(주) 어깨동무"),
+                  Text("대표 이사 : 김소민 김이설 박병제 이건희 이유림 (공동)"),
+                  Text("연락처 : lucas50103@naver.com"),
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              )
+            ]),
           ],
         ));
   }

@@ -1,4 +1,4 @@
-package com.dungsil.toghter
+package com.dungsil.together
 
 import io.flutter.embedding.android.FlutterActivity
 

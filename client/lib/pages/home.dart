@@ -24,6 +24,8 @@ class HomePageState extends State<HomePage> {
   List<CardContent>? result = [];
   List<CardContent>? cardcontent = [];
 
+  late AnimationController controller;
+
   void loadData() async {
     final prefs = await SharedPreferences.getInstance();
     accessToken = prefs.getString('accessToken') ?? '';
@@ -134,7 +136,7 @@ class HomePageState extends State<HomePage> {
                       const SizedBox(height: 50),
                       const Text("서울시님, 안녕하세요."),
                       const SizedBox(height: 10),
-                      result?.isNotEmpty ?? false
+                      (result?.isNotEmpty ?? false)
                           ? const Text("잔액조회 및 이용내역을 확인해보세요.")
                           : const Text("지금 바로 서울시꿈나무카드를 등록해보세요."),
                       const SizedBox(height: 30),
@@ -150,46 +152,68 @@ class HomePageState extends State<HomePage> {
                             width: 1,
                           ),
                         ),
-                        child: cardcontent?.isNotEmpty ?? false
-                            ? Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                    Row(
-                                      children: [
-                                        const SizedBox(width: 10),
-                                        Image.asset(
-                                          "asset/bank/신한은행로고.png",
+                        child: (result?.isNotEmpty ?? false)
+                            ? (cardcontent?.isNotEmpty ?? false)
+                                ? Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                        Row(
+                                          children: [
+                                            const SizedBox(width: 10),
+                                            Image.asset(
+                                              "asset/bank/신한은행로고.png",
+                                              width: 30,
+                                              height: 30,
+                                            ),
+                                            const Text("서울시님의 꿈나무카드",
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 12,
+                                                ))
+                                          ],
+                                        ),
+                                        Text(
+                                          "${cardcontent?[0].balance}",
+                                          style: const TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Text("일부 금액 사용량이 "),
+                                            Text("$remainingDays일 ",
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color(0xFF42CE00))),
+                                            const Text("남았어요!")
+                                          ],
+                                        ),
+                                        const SizedBox(height: 0),
+                                      ])
+                                : // loading circle
+                                const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
                                           width: 30,
                                           height: 30,
-                                        ),
-                                        const Text("서울시님의 꿈나무카드",
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12,
-                                            ))
-                                      ],
-                                    ),
-                                    Text(
-                                      "${cardcontent?[0].balance}",
-                                      style: const TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text("일부 금액 사용량이 "),
-                                        Text("$remainingDays일 ",
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Color(0xFF42CE00))),
-                                        const Text("남았어요!")
-                                      ],
-                                    ),
-                                    const SizedBox(height: 0),
-                                  ])
+                                          child: CircularProgressIndicator(
+                                              color: Color(0xFF42CE00))),
+                                      SizedBox(height: 10),
+                                      Text("잔액 조회 중입니다.",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                      SizedBox(height: 10),
+                                      Text("잠시만 기다려주세요.",
+                                          style: TextStyle(
+                                              color: Color(0xFF858585),
+                                              fontSize: 12)),
+                                    ],
+                                  )
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -227,28 +251,28 @@ class HomePageState extends State<HomePage> {
         result?.isNotEmpty ?? false
             ? Column(
                 children: [
-                  SizedBox(
-                    height: 50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        // setting icon
-                        const Icon(
-                          Icons.settings_outlined,
-                          color: Color(0xFF4D4D4D),
-                          size: 20,
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text("조회설정",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF4D4D4D))),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.end,
+                  //     children: [
+                  //       // setting icon
+                  //       const Icon(
+                  //         Icons.settings_outlined,
+                  //         color: Color(0xFF4D4D4D),
+                  //         size: 20,
+                  //       ),
+                  //       TextButton(
+                  //         onPressed: () {},
+                  //         child: const Text("조회설정",
+                  //             style: TextStyle(
+                  //                 fontSize: 15,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 color: Color(0xFF4D4D4D))),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   SizedBox(
                       height: MediaQuery.of(context).size.height * 0.27,
                       width: MediaQuery.of(context).size.width * 0.9,

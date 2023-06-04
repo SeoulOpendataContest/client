@@ -165,24 +165,27 @@ class _ClientMap implements ClientMap {
   }
 
   @override
-  Future<String> getMapNameSearch({required dynamic jsondata}) async {
+  Future<List<StoreInfo>> getStoreSearch({required dynamic jsondata}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = jsondata;
-    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<StoreInfo>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/location/namesearch',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data!;
+            .compose(
+              _dio.options,
+              '/location/namesearch',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => StoreInfo.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 
@@ -248,6 +251,8 @@ class _ClientMap implements ClientMap {
     return requestOptions;
   }
 }
+
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _ClientPerson implements ClientPerson {
   _ClientPerson(

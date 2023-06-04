@@ -12,7 +12,7 @@ abstract class ClientMap {
   Future<List<StoreInfo>> getMapStore({@Body() required jsondata});
 
   @GET('/location/namesearch')
-  Future<String> getMapNameSearch({@Body() required jsondata});
+  Future<List<StoreInfo>> getStoreSearch({@Body() required jsondata});
 
   @GET('/location/goodvibestorefind')
   Future<List<StoreInfo>> getMapGoodVibeStoreFind({@Body() required jsondata});

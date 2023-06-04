@@ -331,6 +331,7 @@ class SignUpState extends State<SignUp> {
                                     onPressed: () async {
                                       formKey.currentState!.save();
                                       CheckName(nameCheck);
+                                      print("name : $nameCheck");
                                       nameCheck
                                           ? basicAlertShow(
                                               context,

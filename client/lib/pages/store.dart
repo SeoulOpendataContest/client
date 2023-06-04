@@ -17,11 +17,13 @@ class StorePage extends StatefulWidget {
 class StorePageState extends State<StorePage> {
   bool screenIndex = true;
   bool dataloading = true;
+  bool isSearch = false;
 
   Set<Marker> markers = {};
   Set<Circle> circles = {};
 
   late KakaoMapController mapController;
+  final _searchController = TextEditingController();
   String myAddress = '내 주소';
   double mylat = 37.541;
   double mylong = 126.986;
@@ -29,6 +31,7 @@ class StorePageState extends State<StorePage> {
   int tmp = 0;
 
   List<StoreInfo> storeInfo = [];
+  List<StoreInfo> storeSearchList = [];
   List<String> storeFilter = [
     '전체',
     '편의점',
@@ -52,6 +55,21 @@ class StorePageState extends State<StorePage> {
     '제과점',
     '일반대중음식'
   ];
+
+  Future<List<StoreInfo>> storeSearch() async {
+    final dio = Dio()..interceptors.add(CustomLogInterceptor());
+    final restClient = ClientMap(dio);
+    var jsondata = {
+      'name': _searchController.text,
+    };
+
+    restClient.getStoreSearch(jsondata: jsondata).then((value) {
+      setState(() {
+        storeSearchList = value;
+      });
+    });
+    return storeSearchList;
+  }
 
   Future<Position> getMyLocation() async {
     bool serviceEnabled;
@@ -288,93 +306,255 @@ class StorePageState extends State<StorePage> {
               actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.search),
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      isSearch = true;
+                    });
+                  },
                 ),
               ],
             ),
-            body: Container(
-              child: Stack(children: [
-                KakaoMap(
-                    onMapCreated: ((controller) async {
-                      mapController = controller;
-
-                      markers.add(Marker(
-                        markerId: UniqueKey().toString(),
-                        latLng: await mapController.getCenter(),
-                      ));
-                    }),
-                    markers: markers.toList(),
-                    circles: circles.toList(),
-                    center: LatLng(mylat, mylong)),
-                Positioned(
-                  bottom: 20,
-                  left: 20,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: () async {
-                      setState(() {
-                        dataloading = true;
-                      });
-                      await getMyLocation();
-                      setState(() {
-                        dataloading = false;
-                      });
-
-                      mapController.setCenter(LatLng(mylat, mylong));
-
-                      markers.clear();
-                      markers.add(Marker(
-                        markerId: UniqueKey().toString(),
-                        latLng: LatLng(mylat, mylong),
-                      ));
-                      circles.clear();
-                      circles.add(
-                        Circle(
-                          circleId: circles.length.toString(),
-                          center: LatLng(mylat, mylong),
-                          strokeWidth: 3,
-                          strokeColor: const Color(0xFFFFC942),
-                          strokeOpacity: 0.5,
-                          fillColor: const Color(0xFFFFC942),
-                          fillOpacity: 0.2,
-                          radius: 150,
-                        ),
-                      );
-                    },
-                    child: const Icon(Icons.location_searching,
-                        color: Color(0xFF1CDF53)),
-                  ),
-                ),
-                Positioned(
-                  bottom: 20,
-                  left: MediaQuery.of(context).size.width / 2 - 70,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.white),
-                      fixedSize: MaterialStateProperty.all(const Size(140, 35)),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        screenIndex = false;
-                      });
-                    },
-                    child: const Row(
+            body: isSearch
+                ? Column(children: [
+                    // back button
+                    Row(
                       children: [
-                        Icon(Icons.menu, color: Colors.black),
-                        SizedBox(width: 10),
-                        Text(
-                          '리스트 보기',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
-                          ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            setState(() {
+                              isSearch = false;
+                            });
+                          },
                         ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Container(
+                            // search textfield
+                            padding: const EdgeInsets.all(20),
+                            child: TextField(
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                hintText: '가맹점 이름 입력',
+                                hintStyle: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFFABABAB)),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.search),
+                                  onPressed: () {
+                                    storeSearch();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                  ),
-                ),
-              ]),
-            ))
+                    // list view of storeSearchList
+                    Expanded(
+                        child: ListView.separated(
+                            itemCount: storeSearchList.length,
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(
+                                      height: 2,
+                                      color: Color(0xFFE2E2E2),
+                                    ),
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const SizedBox(
+                                          width: 30,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            //image
+                                            storeSearchList[index].category ==
+                                                    "일반대중음식"
+                                                ? Image.asset(
+                                                    'asset/categorylist/기타 리스트.png',
+                                                    height: 20,
+                                                  )
+                                                : Image.asset(
+                                                    'asset/categorylist/${storeSearchList[index].category} 리스트.png',
+                                                    height: 20,
+                                                  ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            Text(
+                                              storeSearchList[index].name,
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              storeSearchList[index]
+                                                  .storeaddress,
+                                              style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFF696969)),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        const SizedBox(height: 15),
+                                        Text(
+                                            Geolocator.distanceBetween(
+                                                          mylat,
+                                                          mylong,
+                                                          storeSearchList[index]
+                                                              .latitude,
+                                                          storeSearchList[index]
+                                                              .longitude,
+                                                        ) /
+                                                        1000 <
+                                                    1
+                                                ? "${Geolocator.distanceBetween(
+                                                    mylat,
+                                                    mylong,
+                                                    storeSearchList[index]
+                                                        .latitude,
+                                                    storeSearchList[index]
+                                                        .longitude,
+                                                  ).round()} m"
+                                                : "${(Geolocator.distanceBetween(
+                                                      mylat,
+                                                      mylong,
+                                                      storeSearchList[index]
+                                                          .latitude,
+                                                      storeSearchList[index]
+                                                          .longitude,
+                                                    ) / 1000).round()} km",
+                                            style: const TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFF696969))),
+                                        RawMaterialButton(
+                                          onPressed: () {
+                                            _launchUrl(Uri.parse(
+                                                storeSearchList[index]
+                                                    .storeurl));
+                                          },
+                                          fillColor: const Color(0xFFFFC842),
+                                          elevation: 0,
+                                          shape: const CircleBorder(),
+                                          child: const Icon(
+                                            Icons.location_on,
+                                            size: 20,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              );
+                            }))
+                  ])
+                : Container(
+                    child: Stack(children: [
+                      KakaoMap(
+                          onMapCreated: ((controller) async {
+                            mapController = controller;
+
+                            markers.add(Marker(
+                              markerId: UniqueKey().toString(),
+                              latLng: await mapController.getCenter(),
+                            ));
+                          }),
+                          markers: markers.toList(),
+                          circles: circles.toList(),
+                          center: LatLng(mylat, mylong)),
+                      Positioned(
+                        bottom: 20,
+                        left: 20,
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          onPressed: () async {
+                            setState(() {
+                              dataloading = true;
+                            });
+                            await getMyLocation();
+                            setState(() {
+                              dataloading = false;
+                            });
+
+                            mapController.setCenter(LatLng(mylat, mylong));
+
+                            markers.clear();
+                            markers.add(Marker(
+                              markerId: UniqueKey().toString(),
+                              latLng: LatLng(mylat, mylong),
+                            ));
+                            circles.clear();
+                            circles.add(
+                              Circle(
+                                circleId: circles.length.toString(),
+                                center: LatLng(mylat, mylong),
+                                strokeWidth: 3,
+                                strokeColor: const Color(0xFFFFC942),
+                                strokeOpacity: 0.5,
+                                fillColor: const Color(0xFFFFC942),
+                                fillOpacity: 0.2,
+                                radius: 150,
+                              ),
+                            );
+                          },
+                          child: const Icon(Icons.location_searching,
+                              color: Color(0xFF1CDF53)),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 20,
+                        left: MediaQuery.of(context).size.width / 2 - 70,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                            fixedSize:
+                                MaterialStateProperty.all(const Size(140, 35)),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              screenIndex = false;
+                            });
+                          },
+                          child: const Row(
+                            children: [
+                              Icon(Icons.menu, color: Colors.black),
+                              SizedBox(width: 10),
+                              Text(
+                                '리스트 보기',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ))
         : Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -397,12 +577,6 @@ class StorePageState extends State<StorePage> {
                     color: Colors.black),
               ),
               centerTitle: true,
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {},
-                ),
-              ],
             ),
             body: Column(children: [
               Row(
@@ -457,9 +631,16 @@ class StorePageState extends State<StorePage> {
                   height: 1,
                   color: const Color(0xFFE2E2E2)),
               if (dataloading)
-                const Center(
-                    child: CircularProgressIndicator(
-                        backgroundColor: Colors.black))
+                const Column(children: [
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Center(child: CircularProgressIndicator()),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text("지도에서 위치 새로고침 버튼을 누르고 기다려주세요!")
+                ])
               else
                 Expanded(
                     child: ListView.separated(
