@@ -222,7 +222,6 @@ class ChatPageState extends State<ChatPage> {
                                               fontWeight: FontWeight.bold)),
                                       const SizedBox(height: 5),
                                       Container(
-                                        height: 120,
                                         alignment: Alignment.centerLeft,
                                         decoration: deco,
                                         child: Container(

@@ -24,7 +24,7 @@ class StorePageState extends State<StorePage> {
 
   late KakaoMapController mapController;
   final _searchController = TextEditingController();
-  String myAddress = '내 주소';
+  String myAddress = '검색';
   double mylat = 37.541;
   double mylong = 126.986;
   int currentFilter = 0;
@@ -111,7 +111,7 @@ class StorePageState extends State<StorePage> {
     var jsondata2 = {
       'latitude': mylat.toString(),
       'longitude': mylong.toString(),
-      'distance': '100',
+      'distance': '2',
       'category': searchFilter[currentFilter],
     };
     restClient.getMapStore(jsondata: jsondata2).then((value) {

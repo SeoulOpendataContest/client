@@ -10,8 +10,6 @@ import 'package:client/util/alert.dart';
 import '../api/client.dart';
 import '../api/log_interceptor.dart';
 
-import 'home.dart';
-
 class AddCardPage extends StatefulWidget {
   const AddCardPage({Key? key}) : super(key: key);
   @override
@@ -231,8 +229,17 @@ class AddCardPageState extends State<AddCardPage> {
                                                   hintStyle:
                                                       TextStyle(fontSize: 12),
                                                 ),
-                                                autovalidateMode:
-                                                    AutovalidateMode.always,
+                                                validator: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return '유효기간을 입력해주세요';
+                                                  }
+                                                  if (!RegExp(
+                                                          r'^[0-9]{2}\/[0-9]{2}$')
+                                                      .hasMatch(value)) {
+                                                    return 'MM/YY입력 시 가운데에 /를 같이 입력해주세요';
+                                                  }
+                                                  return null;
+                                                },
                                                 onSaved: (value) {
                                                   cardExpireDate =
                                                       String.fromCharCodes(

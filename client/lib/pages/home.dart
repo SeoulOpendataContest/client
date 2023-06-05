@@ -251,28 +251,9 @@ class HomePageState extends State<HomePage> {
         result?.isNotEmpty ?? false
             ? Column(
                 children: [
-                  // SizedBox(
-                  //   height: 50,
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.end,
-                  //     children: [
-                  //       // setting icon
-                  //       const Icon(
-                  //         Icons.settings_outlined,
-                  //         color: Color(0xFF4D4D4D),
-                  //         size: 20,
-                  //       ),
-                  //       TextButton(
-                  //         onPressed: () {},
-                  //         child: const Text("조회설정",
-                  //             style: TextStyle(
-                  //                 fontSize: 15,
-                  //                 fontWeight: FontWeight.bold,
-                  //                 color: Color(0xFF4D4D4D))),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  const SizedBox(
+                    height: 50,
+                  ),
                   SizedBox(
                       height: MediaQuery.of(context).size.height * 0.27,
                       width: MediaQuery.of(context).size.width * 0.9,
@@ -284,6 +265,12 @@ class HomePageState extends State<HomePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Image.asset(
+                                  "asset/store/가맹점-한식.png",
+                                  width: 30,
+                                  height: 30,
+                                ),
+                                const SizedBox(width: 10),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [

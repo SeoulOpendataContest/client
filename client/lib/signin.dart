@@ -85,6 +85,8 @@ class SigninState extends State<Signin> {
                               }
                               return null;
                             },
+                            obscureText: true,
+                            obscuringCharacter: '*',
                             autovalidateMode: AutovalidateMode.always,
                             onSaved: (value) {
                               password = String.fromCharCodes(value!.codeUnits);

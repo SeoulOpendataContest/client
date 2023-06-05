@@ -131,6 +131,12 @@ class SignUpState extends State<SignUp> {
                                           RegExp(r"[^a-zA-Z0-9@._/-]"))) {
                                         return '사용 가능한 특수문자는 (_/-/@/.)입니다.';
                                       }
+                                      // if not email type
+                                      else if (!RegExp(
+                                              r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")
+                                          .hasMatch(value)) {
+                                        return '이메일 형식이 아닙니다. 이메일 형식으로 입력해주세요.';
+                                      }
                                       idCheck = true;
                                       return null;
                                     },
